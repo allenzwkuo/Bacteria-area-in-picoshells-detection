@@ -1,6 +1,6 @@
 import React from 'react';
 import "../styles/button.css";
-const Button = ({ size = 'mdeium', children, onClick }) => {
+const Button = ({ size = 'medium', children, onClick }) => {
 
     return (
 

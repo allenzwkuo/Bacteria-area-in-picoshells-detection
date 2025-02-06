@@ -1,0 +1,210 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    padding: 2vw; 
+}
+
+.logo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 1vw;
+    width: 7vw;
+    height: auto;
+}
+
+.card {
+    padding: 5vw; 
+    border-radius: 1em;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 90vw; 
+    height: 70vh;
+    max-width: 70vw; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    text-align: center;
+    font-size: 10vh; 
+    font-weight: bold;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    gap: 2vw;
+}
+
+.well-plate-6-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.well-plate-96-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4vh;
+}
+
+.well-plate-6-image {
+    width: 22vw;
+    height: auto;
+    object-fit: contain;
+}
+
+.well-plate-96-image {
+    width: 20vw;
+    height: auto;
+    object-fit: contain;
+}
+
+.button-container button {
+    font-size: 2vw;
+    padding: 0.5vh 2vw;
+}
+
+.plate-grid {
+    justify-items: center;
+    display: grid;
+    gap: 2vw;
+    margin-top: 4vw;
+}
+
+.plate-grid-96-well {
+    grid-template-columns: repeat(12, 8vw); 
+    grid-template-rows: repeat(8, 8vw); 
+}
+
+.plate-grid-6-well {
+    grid-template-columns: repeat(3, 30vw);
+    grid-template-rows: repeat(2, 30vw); 
+}
+
+.well {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 50%;
+}
+
+.well.selected {
+    background-color: #487AB1; 
+    opacity: 0.6;
+}
+
+.well.locked {
+    background-color: #dcdcdc; 
+}
+
+.well input[type="file"] {
+    width: 80%;
+    height: auto;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.well:hover {
+    border: 2px solid #487AB1; 
+    box-shadow: 0px 0px 15px 0px #487AB1;
+}
+
+.locked-wells .well:hover {
+    border: 1px solid #ccc;
+    box-shadow: none;
+    cursor: default;
+}
+
+.continue-button-container {
+    margin-top: 5vh;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.continue-button-container button {
+    font-size: 3vw;
+    padding: 0.5vh 2vw;
+}
+
+.change-selection-button-container {
+    margin-top: 5vh;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.change-selection-button-container button {
+    font-size: 3vw;
+    padding: 0.5vh 2vw;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+    .title {
+    font-size: 4vw;
+    }
+
+    .plate-grid-96-well,
+    .plate-grid-6-well {
+    grid-template-columns: repeat(12, 40px); 
+    grid-template-rows: repeat(8, 40px);
+    }
+
+    .well {
+    width: 40px;
+    height: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+    padding: 5vw;
+    }
+
+    .card {
+    padding: 8vw;
+    }
+
+    .title {
+    font-size: 5vw;
+    }
+
+    .plate-grid-96-well,
+    .plate-grid-6-well {
+    grid-template-columns: repeat(12, 10vw); 
+    grid-template-rows: repeat(8, 10vw);
+    }
+}
+    

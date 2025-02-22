@@ -17,7 +17,7 @@ def is_square(cropped_image):
     aspect_ratio = width / height
     return 0.9 <= aspect_ratio <= 1.1 
 
-alphabet = string.ascii_uppercase  
+alphabet = string.ascii_uppercase   
 counter = 1  
 
 for image_name in os.listdir(input_dir):

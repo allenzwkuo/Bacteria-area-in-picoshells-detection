@@ -8,7 +8,7 @@ model = YOLO('../model_weights/yolo_model_weights.pt')
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model.to(device)
 
-input_dir = 'large_split_images'
+input_dir = 'test'
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 for conf in [round(i * 0.1, 1) for i in range(11)]:
@@ -16,10 +16,10 @@ for conf in [round(i * 0.1, 1) for i in range(11)]:
     os.makedirs(output_dir, exist_ok=True)
 
     for image_name in os.listdir(input_dir):
-        if image_name.endswith('.png'):
+        if image_name.endswith('.jpg'):
             image_path = os.path.join(input_dir, image_name)
             image_to_analyze = Image.open(image_path)
-            results = model(image_to_analyze, imgsz=683, task="segment", conf=conf, device=device)
+            results = model(image_to_analyze, imgsz=4096, task="segment", conf=conf, device=device)
             num_boxes = len(results[0].boxes.xyxy)
             draw = ImageDraw.Draw(image_to_analyze)
             for box in results[0].boxes.xyxy:

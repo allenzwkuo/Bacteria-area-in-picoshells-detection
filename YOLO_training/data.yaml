@@ -1,0 +1,13 @@
+train: C:\Users\Allen\Desktop\Capstone ML\Capstone-Bacteria-Detection-ML\YOLO_training\train
+val: C:\Users\Allen\Desktop\Capstone ML\Capstone-Bacteria-Detection-ML\YOLO_training\valid
+test: C:\Users\Allen\Desktop\Capstone ML\Capstone-Bacteria-Detection-ML\YOLO_training\test
+
+nc: 1
+names: ['picoshell']
+
+roboflow:
+  workspace: allen-33m3u
+  project: picoshellv2
+  version: 8
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/allen-33m3u/picoshellv2/dataset/8

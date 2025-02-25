@@ -1,116 +1,124 @@
 import React, { useState } from 'react';
-import "./styles/styles.css";
-import Button from "./components/button.jsx";
-import image1 from "./images/6_wellplate_image.png";
-import image2 from "./images/96_wellplate_image.png";
-import logo from "./images/picopals_logo.png";
+import axios from 'axios';
+import './styles/styles.css';
 
-function App() {
+const App = () => {
+const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+const cols = Array.from({ length: 12 }, (_, i) => i + 1);
+const [selectedWell, setSelectedWell] = useState('');
+const [time, setTime] = useState('');
+const [concentration, setConcentration] = useState('');
+const [percentage, setPercentage] = useState(null);
+const [wellData, setWellData] = useState({});
+const [results, setResults] = useState({});
 
-    const [plateType, setPlateType] = useState(null);
-    const [selectedWells, setSelectedWells] = useState(new Set());
-    const [lockedWells, setLockedWells] = useState(null);
-    const [imageUploads, setImageUploads] = useState({});
+const handleWellClick = (well) => {
+    setSelectedWell(well);
+    setTime('');
+    setConcentration('');
+    setPercentage(null);
+};
 
-    const plateLayouts = {
-        "96-well": {rows: 8, cols: 12},
-        "6-well": {rows: 2, cols: 3},
-    };
+const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('well', selectedWell);
 
-    const toggleWell = (well) => {
-        if (lockedWells) return;
-        setSelectedWells((prevSelected) => {
-            const newSelection = new Set(prevSelected);
-            if (newSelection.has(well)) {
-                newSelection.delete(well);
-            } else {
-                newSelection.add(well);
-            }
-            return newSelection;
-        });
-    };
+    try {
+    const response = await axios.post('http://localhost:5000/upload', formData, {
+        headers: {
+        'Content-Type': 'multipart/form-data',
+        },
+    });
+    setPercentage(response.data.percentage);
+    } catch (error) {
+    console.error('Error uploading image:', error);
+    }
+};
 
-    const lockSelection = () => {
-        setLockedWells(new Set(selectedWells));
-        setSelectedWells(new Set()); 
-    };
+const handleSave = () => {
+    if (selectedWell && time && concentration && percentage !== null) {
+    const newEntry = { time, concentration, percentage };
+    setWellData(prev => ({
+        ...prev,
+        [selectedWell]: [...(prev[selectedWell] || []), newEntry],
+    }));
+    setSelectedWell('');
+    setTime('');
+    setConcentration('');
+    setPercentage(null);
+    }
+};
 
-    const uploadImage = (well, file) => {
-        setImageUploads((prevUploads) => ({
-            ...prevUploads,
-            [well]: file, 
-        }));
-    };
+const handleViewResults = async () => {
+    try {
+    const response = await axios.post('http://localhost:5000/results', { wellData });
+    setResults(response.data);
+    } catch (error) {
+    console.error('Error fetching results:', error);
+    }
+};
 
-    return (
-        <div className="container">
-            <img src={logo} alt="Logo" className="logo"/>
-            {!plateType ? (
-                <div className="card">
-                    <h1 className="title">Select Plate Type</h1>
-                    <div className="button-container">
-                        <div className="well-plate-6-button-container">
-                            <img className="well-plate-6-image" src={image1} alt="image of a 6 well plate"/>
-                            <Button size="large" onClick={() => setPlateType("6-well")}>
-                                6-Well Plate
-                            </Button>
-                        </div>
-                        <div className="well-plate-96-button-container">
-                            <img className="well-plate-96-image" src={image2} alt="image of a 96 well plate"/>
-                            <Button size="large" onClick={() => setPlateType("96-well")}>
-                                96-Well Plate
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            ) : (
-                <div className="card">
-                    <h2 className="title">Plate Type: {plateType}</h2>
-                    <div 
-                        className={`plate-grid ${lockedWells ? "locked-wells" : ""} ${plateType === "6-well" ? "plate-grid-6-well" : "plate-grid-96-well"}`} 
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: `repeat(${plateLayouts[plateType].cols}, 1fr)`,
-                            gridTemplateRows: `repeat(${plateLayouts[plateType].rows}, 1fr)`,
-                            gap: "10px",
-                            marginTop: "1vh"
-                        }}
-                    >
-                        {[...Array(plateLayouts[plateType].rows * plateLayouts[plateType].cols)].map((_, index) => {
-                            const wellId = `Well-${index + 1}`;
-                            return (
-                                <div
-                                    key={wellId}
-                                    className={`well ${lockedWells?.has(wellId) ? "locked" : selectedWells.has(wellId) ? "selected" : ""}`}
-                                    onClick={() => toggleWell(wellId)}
-                                >
-                                    {lockedWells?.has(wellId) && (
-                                        <input 
-                                            type="file"
-                                            onChange={(e) => uploadImage(wellId, e.target.files[0])}
-                                        />
-                                    )}
-                                </div>
-                            );
-                        })}
-                    </div>
-                    {!lockedWells ? (
-                        <div className="continue-button-container">
-                            <Button size="medium" onClick={lockSelection} disabled={selectedWells.size === 0}>
-                                Continue
-                            </Button>
-                        </div>
-                    ) : (
-                        <div className="change-selection-button-container">
-                            <Button size="medium" onClick={() => { setPlateType(null); setLockedWells(null); setImageUploads({}); }}>
-                                Change Selection
-                            </Button>
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>
-    );
+const handleReset = () => {
+    setSelectedWell('');
+    setTime('');
+    setConcentration('');
+    setPercentage(null);
+    setWellData({});
+    setResults({});
 }
+
+return (
+    <div className="app-container">
+    <div className="left-section">
+        <h2>Selected Well: {selectedWell}</h2>
+        {selectedWell && (
+        <>
+            <input 
+            type="number" 
+            placeholder="Time Point" 
+            value={time} 
+            onChange={(e) => setTime(e.target.value)} 
+            />
+            <input 
+            type="text" 
+            placeholder="Concentration of Ampicillin" 
+            value={concentration} 
+            onChange={(e) => setConcentration(e.target.value)} 
+            />
+            <input type="file" onChange={handleImageUpload} />
+            {percentage !== null && <p>Percentage: {percentage}%</p>}
+            <button onClick={handleSave}>Save</button>
+        </>
+        )}
+    </div>
+
+    <div className="right-section">
+        {rows.map(row => (
+        <div key={row} className="row">
+            {cols.map(col => {
+            const well = `${row}${col}`;
+            return (
+                <div 
+                key={well} 
+                className={`well ${results[well] ? results[well] : ''}`} 
+                onClick={() => handleWellClick(well)}
+                >
+                {well}
+                </div>
+            );
+            })}
+        </div>
+        ))}
+    </div>
+
+    <div className="bottom-section">
+        <button onClick={handleViewResults}>View Results</button>
+        <button onClick={handleReset} className="reset-button">Reset</button>
+    </div>
+    </div>
+);
+};
 
 export default App;

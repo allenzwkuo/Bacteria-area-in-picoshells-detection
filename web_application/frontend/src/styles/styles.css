@@ -17,30 +17,30 @@ html, body {
 
 .left-section {
     grid-area: left;
-    padding: 20px;
+    padding: 5%;
     border-right: 1px solid #000000;
     position: relative;
 }
 
 .logo {
     display: block;
-    width: 150px;
+    width: 32.5%;
 }
 
 .left-section h2 {
-    font-size: 40px;
+    font-size: 200%;
     text-align: center;
 }
 
 .instructions {
     position: absolute;
-    bottom: 30px;
-    left: 15px;
-    right: 20px;
+    bottom: 2%;
+    left: 5%;
+    right: 5%;
 }
 
 .instructions li {
-    margin-bottom: 3px;
+    margin-bottom: 1%;
 }
 
 .right-section {
@@ -49,14 +49,14 @@ html, body {
     grid-template-rows: repeat(10, 1fr);
     justify-items: center;
     align-items: center;
-    padding: 20px;
-    margin-top: 50px;
+    padding: 1%;
+    margin-top: 5%;
 }
 
 .row {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 2vw;
 }
 
 .well {

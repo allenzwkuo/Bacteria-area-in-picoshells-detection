@@ -5,10 +5,10 @@ import os
 import string
 
 
-model = YOLO('../model_weights/yolo_model_weights.pt')
+model = YOLO('../model_weights/yolo_final_model_weights.pt')
 
-input_dir = '../Picoshell_images'
-output_dir = "../Picoshell_images_sliced"
+input_dir = '../picoshell_images_edgecases'
+output_dir = "../picoshell_images_sliced_edgecases"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -25,7 +25,7 @@ for image_name in os.listdir(input_dir):
         image_path = os.path.join(input_dir, image_name)
         image_to_analyze = Image.open(image_path)
 
-        results = model(image_to_analyze, imgsz=1024, task="segment")
+        results = model(image_to_analyze, imgsz=2048, task="segment", device="cuda")
 
         boxes = results[0].boxes
 
@@ -35,7 +35,7 @@ for image_name in os.listdir(input_dir):
             cropped_image = image_to_analyze.crop((x_min, y_min, x_max, y_max))
 
             if is_square(cropped_image):
-                letter_index = (counter - 1) // 99
+                letter_index = ((counter - 1) // 99) + 17
                 letter = alphabet[letter_index]  
                 num_suffix = (counter - 1) % 99 + 1  
                 

@@ -1,7 +1,7 @@
 from PIL import Image
 import os
 
-input_dir = './Picoshell_images_sliced' 
+input_dir = '../picoshell_images_sliced_edgecases' 
 
 for image_name in os.listdir(input_dir):
     if image_name.endswith('.jpg'):

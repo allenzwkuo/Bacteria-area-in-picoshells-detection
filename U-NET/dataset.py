@@ -29,7 +29,8 @@ class PicoshellDatatset(Dataset):
         mask = np.array(Image.open(mask_path).convert("L"), dtype=np.float32)
 
         # binarizes mask, converts all white areas to 1
-        mask[mask == 255.0] = 1.0
+        threshold = 128
+        mask = (mask > threshold).astype(np.float32)
 
         # applies transformations if specified on both masks and images
         if self.transform is not None:

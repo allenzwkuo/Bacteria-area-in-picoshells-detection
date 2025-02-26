@@ -18,14 +18,39 @@ html, body {
 .left-section {
     grid-area: left;
     padding: 20px;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid #000000;
+    position: relative;
+}
+
+.logo {
+    display: block;
+    width: 150px;
+}
+
+.left-section h2 {
+    font-size: 40px;
+    text-align: center;
+}
+
+.instructions {
+    position: absolute;
+    bottom: 30px;
+    left: 15px;
+    right: 20px;
+}
+
+.instructions li {
+    margin-bottom: 3px;
 }
 
 .right-section {
     grid-area: right;
     display: grid;
     grid-template-rows: repeat(10, 1fr);
+    justify-items: center;
+    align-items: center;
     padding: 20px;
+    margin-top: 50px;
 }
 
 .row {
@@ -49,10 +74,91 @@ html, body {
 
 .well:hover {
     background-color: #ddd;
+    box-shadow: 0px 0px 15px 0px #ddd
+}
+
+.well.highlighted {
+    background-color: #e1f1fd;
+    border: 2px solid #c1d8f0;
 }
 
 .well.red {
     background-color: #ff8a80;
+}
+
+.time-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.concentration-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.time-input:focus,
+.concentration-input:focus {
+    border-color: #4663ac;
+    outline: none;
+}
+
+.file-upload-button {
+    background-color: #83B1E1; 
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.file-upload-button:hover {
+    box-shadow: 0px 0px 15px 0px #83B1E1;
+}
+
+.percentage-text {
+    font-size: 24px;
+}
+
+.save-button {
+    background-color: #83B1E1;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.save-button:hover {
+    box-shadow: 0px 0px 15px 0px #83B1E1;
+}
+
+.view-results-button {
+    background-color: #83B1E1; 
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.view-results-button:hover {
+    box-shadow: 0px 0px 15px 0px #83B1E1;
 }
 
 .reset-button {
@@ -63,11 +169,13 @@ html, body {
     padding: 10px 20px;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 16px;
     transition: background-color 0.3s;
 }
 
 .reset-button:hover {
     background-color: #ff1744;
+    box-shadow: 0px 0px 15px 0px #ff1744;
 }
 
 
@@ -75,4 +183,7 @@ html, body {
     grid-area: bottom;
     text-align: center;
     padding: 20px;
+    border-top: 1px solid #000000;
 }
+
+

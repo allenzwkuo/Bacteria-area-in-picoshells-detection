@@ -4,7 +4,7 @@ from PIL import Image
 # Path where your PNG mask images are stored
 task_folder = '.'
 # Path where you want the renamed masks (as JPG)
-export_folder = '../PicoshellDataset_UNET/train_masks'
+export_folder = '../PicoshellDataset_UNET/test_masks'
 
 # Create black 100x100 mask
 def create_black_mask(new_filename):
@@ -27,7 +27,7 @@ end_task = task_numbers[-1]
 # Now rename existing and create new black masks for missing tasks
 counter = 1
 for task_num in range(start_task, end_task + 1):
-    new_filename = f"D{counter:02d}_mask.jpg"
+    new_filename = f"I{counter:02d}_mask.jpg"
     
     # Check if the task exists
     matching_files = [f for f in image_files if f.startswith(f'task-{task_num}-')]

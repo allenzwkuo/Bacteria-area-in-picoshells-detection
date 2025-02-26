@@ -1,6 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
 import albumentations as A
+from sklearn.metrics import roc_curve, auc
 from albumentations.pytorch import ToTensorV2
 from tqdm import tqdm 
 import torch.nn as nn
@@ -19,12 +20,12 @@ from utils import (
 LEARNING_RATE = 1e-4 # step size (generic 1e-3)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 16 # hardware
-NUM_EPOCHS = 1 
+NUM_EPOCHS = 50 
 NUM_WORKERS = 2 # hardware
 IMAGE_HEIGHT = 100
 IMAGE_WIDTH = 100
 PIN_MEMORY = True # hardware
-LOAD_MODEL = True
+LOAD_MODEL = False
 TRAIN_IMG_DIR = "../PicoshellDataset_UNET/train_imgs/"
 TRAIN_MASK_DIR = "../PicoshellDataset_UNET/train_masks/"
 VAL_IMG_DIR = "../PicoshellDataset_UNET/val_imgs/"
@@ -71,6 +72,7 @@ def validate_fn(loader, model, loss_fn):
 
             predictions = model(data)
             loss = loss_fn(predictions, targets)
+
             epoch_loss += loss.item()
 
     model.train()

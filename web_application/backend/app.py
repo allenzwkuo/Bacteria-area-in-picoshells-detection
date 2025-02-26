@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from image_processing import process_image
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Placeholder storage
 well_data = {}
 
 @app.route('/upload', methods=['POST'])
@@ -14,24 +15,24 @@ def upload_image():
     concentration = request.form.get('concentration')
     image = request.files['image']
 
-    # Here you would run the image through your ML model
-    # For now, let's return a dummy percentage
-    percentage = 70  # Replace with ML model output
+    image_path = os.path.join('temp_images', image.filename)
+    os.makedirs('temp_images', exist_ok=True)
+    image.save(image_path)
 
-    # Initialize list for the well if it doesn't exist
+    percentage = process_image(image_path)
+
+    os.remove(image_path)
+
     if well not in well_data:
         well_data[well] = []
 
-    # Check if this time point already exists
     existing_entry = next((entry for entry in well_data[well] if entry['time'] == time), None)
     
     if existing_entry:
-        # Average the new percentage with the existing one
         existing_percentage = existing_entry['percentage']
         new_percentage = (existing_percentage + percentage) / 2
         existing_entry['percentage'] = new_percentage
     else:
-        # If no existing entry, add a new one
         new_entry = {
             'time': time,
             'concentration': concentration,

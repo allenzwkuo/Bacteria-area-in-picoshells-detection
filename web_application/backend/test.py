@@ -6,27 +6,21 @@ import numpy as np
 from ultralytics import YOLO
 from model import UNET
 
-# Device configuration
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Load YOLO model
 yolo_model = YOLO('model_weights/yolo_final_model_weights.pt')
 
-# Load U-Net model
 unet_model = UNET(in_channels=3, out_channels=1).to(device)
-unet_model.load_state_dict(torch.load("model_weights/unet_weights.pth.tar")["state_dict"])
+unet_model.load_state_dict(torch.load("model_weights/unet_weights.pth.tar", map_location=torch.device('cpu'))["state_dict"])
 unet_model.eval()
 
-# Input directory
 input_dir = 'test_images'
 
-# Square check function
 def is_square(cropped_image):
     width, height = cropped_image.size
     aspect_ratio = width / height
     return 0.9 <= aspect_ratio <= 1.1 
 
-# U-Net Transform
 transform = transforms.Compose([
     transforms.Resize((100, 100)),
     transforms.ToTensor(),
@@ -41,7 +35,6 @@ def convert_to_jpg(image_path):
         return jpg_path
     return image_path
 
-# Processing Images
 for image_name in os.listdir(input_dir):
     if image_name.lower().endswith(('.png', '.jpeg', '.tif', '.tiff', '.jpg')):
         image_path = os.path.join(input_dir, image_name)
@@ -49,20 +42,16 @@ for image_name in os.listdir(input_dir):
 
         image_to_analyze = Image.open(jpg_path)
 
-        # Run YOLO
-        results = yolo_model(image_to_analyze, imgsz=2048, task="segment", device="cuda")
+        results = yolo_model(image_to_analyze, imgsz=2048, task="segment", device=device)
         
         boxes = results[0].boxes
         white_percentages = []
 
-        # Loop through each box and process separately
         for idx, box in enumerate(boxes.xyxy):
             x_min, y_min, x_max, y_max = box.tolist()
             cropped_image = image_to_analyze.crop((x_min, y_min, x_max, y_max))
 
-            # Only process square-like boxes
             if is_square(cropped_image):
-                # Process with U-Net
                 image_tensor = transform(cropped_image).unsqueeze(0).to(device)
                 with torch.no_grad():
                     output = unet_model(image_tensor)
